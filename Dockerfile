@@ -1,4 +1,4 @@
-FROM ghost:5.75.3 as build
+FROM ghost:5.85.2 as build
 
 RUN apt-get update; apt-get install -y --no-install-recommends ca-certificates wget; \
     dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
@@ -10,10 +10,10 @@ RUN apt-get update; apt-get install -y --no-install-recommends ca-certificates w
 COPY --chmod=a+x docker_entrypoint.sh /usr/local/bin
 COPY scripts/local /var/lib/ghost/current/core/built/admin/assets/local
 
-FROM node:18-bullseye-slim as final
+FROM node:18-bookworm-slim as final
 
 ENV NODE_ENV=production \
-	GHOST_CLI_VERSION=1.25.3 \
+	GHOST_CLI_VERSION=1.26.0 \
 	GHOST_INSTALL=/var/lib/ghost \
 	GHOST_CONTENT=/var/lib/ghost/content
 
@@ -25,14 +25,13 @@ RUN set -eux; \
 WORKDIR $GHOST_INSTALL
 VOLUME $GHOST_CONTENT
 
-COPY --from=build $GHOST_INSTALL $GHOST_INSTALL
+COPY --from=build --chown=node:node $GHOST_INSTALL $GHOST_INSTALL
 COPY --from=build /usr/local/bin/yq /usr/local/bin/
 COPY --from=build /usr/local/bin/gosu /usr/local/bin/
 COPY --from=build /usr/local/bin/docker* /usr/local/bin/
 COPY --from=build /usr/local/lib/node_modules/ghost-cli /usr/local/lib/node_modules/ghost-cli
 
 RUN ln -sfn ../lib/node_modules/ghost-cli/bin/ghost /usr/local/bin/ghost; \
-	ln -sfn $GHOST_INSTALL/versions/$(ls $GHOST_INSTALL/versions/ | sort -V | tail -n 1) $GHOST_INSTALL/current; \
-	chown -R node:node $GHOST_INSTALL; \
+	ln -sfn $GHOST_INSTALL/versions/$(ls $GHOST_INSTALL/versions/ | sort -V | tail -n 1) $GHOST_INSTALL/current; \	
 	chmod 1777 $GHOST_CONTENT
 	

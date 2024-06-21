@@ -8,11 +8,10 @@ TS_FILES := $(shell find ./ -name \*.ts)
 all: verify
 
 install:
-ifeq (,$(wildcard ~/.embassy/config.yaml))
-	@echo; echo "You must define \"host: http://server-name.local\" in ~/.embassy/config.yaml config file first"; echo
-else
-	start-cli package install $(PKG_ID).s9pk
-endif
+	@if [ ! -f ~/.embassy/config.yaml ]; then echo "You must define \"host: http://server-name.local\" in ~/.embassy/config.yaml config file first."; exit 1; fi
+	@echo "\nInstalling to $$(grep -v '^#' ~/.embassy/config.yaml | cut -d'/' -f3) ...\n"
+	@[ -f $(PKG_ID).s9pk ] || ( $(MAKE) && echo "\nInstalling to $$(grep -v '^#' ~/.embassy/config.yaml | cut -d'/' -f3) ...\n" )
+	@start-cli package install $(PKG_ID).s9pk
 
 arm:
 	@rm -f docker-images/x86_64.tar
