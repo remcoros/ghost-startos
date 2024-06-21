@@ -4,6 +4,12 @@
 
 # Ghost for StartOS
 
+    WARNING: this is a customized version of the Ghost wrapper for my personal use. 
+    
+    It contains updates and fixes I found while hosting Ghost on a public custom domain.
+
+    This version is not supported by Start9!
+
 [Ghost](https://github.com/TryGhost/Ghost) is an user-friendly blogging platform designed to simplify the process of publishing content on the web. Known for its elegant and minimalist design, Ghost provides writers, bloggers, and content creators with a distraction-free environment for creating and sharing their thoughts. It offers a range of features, including easy content management, customizable themes, and robust support for multimedia content. This repository creates the `s9pk` package that is installed to run `Ghost` on [StartOS](https://github.com/Start9Labs/start-os/).
 
 ## Dependencies
