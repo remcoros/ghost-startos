@@ -79,7 +79,7 @@ TOR_ADDR="http://$TOR_ADDRESS"
 LAN_ADDR="https://$LAN_ADDRESS"
 URL=$TOR_ADDR
 
-CUSTOM_DOMAIN=$(yq e .customDomain /var/lib/ghost/content/start9/config.yaml)
+CUSTOM_DOMAIN=$(yq e '.customDomain //""' /var/lib/ghost/content/start9/config.yaml)
 if [ ! -z $CUSTOM_DOMAIN ]; then
     URL=$CUSTOM_DOMAIN
 fi
