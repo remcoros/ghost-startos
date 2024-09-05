@@ -1,4 +1,4 @@
-FROM ghost:5.89.0 as build
+FROM ghost:5.93.0 as build
 
 RUN apt-get update; apt-get install -y --no-install-recommends ca-certificates wget; \
     dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
