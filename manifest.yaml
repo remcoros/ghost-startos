@@ -1,8 +1,8 @@
 id: ghost
 title: "Ghost"
-version: 5.93.0
+version: 5.94.0
 release-notes: |
-  * Latest upstream update - full changelog available [here](https://github.com/TryGhost/Ghost/compare/v5.85.2...v5.93.0)
+  * Latest upstream update - full changelog available [here](https://github.com/TryGhost/Ghost/compare/v5.85.2...v5.94.0)
 license: MIT
 wrapper-repo: "https://github.com/Start9Labs/ghost-startos"
 upstream-repo: "https://github.com/TryGhost/ghost"
