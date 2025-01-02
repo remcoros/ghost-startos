@@ -18,7 +18,7 @@ ENV NODE_ENV=production \
 	GHOST_CONTENT=/var/lib/ghost/content
 
 RUN set -eux; \
-    apt-get update; apt-get install -y --no-install-recommends mariadb-server; \
+    apt-get update; apt-get install -y --no-install-recommends mariadb-server nginx; \
     rm /etc/mysql/mariadb.conf.d/50-server.cnf; \
 	rm -rf /var/lib/apt/lists/*
 

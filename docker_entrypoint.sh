@@ -77,14 +77,26 @@ TOR_ADDRESS=$(yq e .tor-address /var/lib/ghost/content/start9/config.yaml)
 LAN_ADDRESS=$(echo "$TOR_ADDRESS" | sed -r 's/(.+)\.onion/\1.local/g')
 TOR_ADDR="http://$TOR_ADDRESS"
 LAN_ADDR="https://$LAN_ADDRESS"
-URL=$TOR_ADDR
+REALURL=$TOR_ADDR
 
 CUSTOM_DOMAIN=$(yq e '.customDomain //""' /var/lib/ghost/content/start9/config.yaml)
 if [ ! -z $CUSTOM_DOMAIN ]; then
-    URL=$CUSTOM_DOMAIN
+    REALURL=$CUSTOM_DOMAIN
 fi
 
-export url=$URL
+cat > /etc/nginx/sites-enabled/default << EOF
+server {
+        listen 8080 default_server;
+        server_name _;
+        location / {
+            proxy_pass http://127.0.0.1:2368;
+            proxy_set_header X-Forwarded-Proto "https";
+        }
+}
+EOF
+nginx
+
+export url=$REALURL
 export database__client=mysql
 export database__connection__host=localhost
 export database__connection__user=root
@@ -113,6 +125,8 @@ sed -i 's#text-red-500 dark:text-red-400"#text-red-500 dark:text-red-400 hidden"
 
 docker-entrypoint.sh node current/index.js &
 ghost_process=$!
+
+echo "URL is: $url"
 
 trap _term TERM
 wait $db_process $ghost_process
